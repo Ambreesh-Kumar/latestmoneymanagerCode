@@ -85,7 +85,7 @@
   padding-right: 50px;
   display: flex;
   flex-direction: row;
-  justify-content: flex-start;
+  justify-content: center;
   align-items: center;
   margin-bottom: 0px;
 }
@@ -145,6 +145,6 @@
 .unordered-history-list {
   display: flex;
   flex-direction: column;
-  justify-content: flex-start;
+  justify-content: center;
   align-items: center;
 }

@@ -21,7 +21,7 @@ class MoneyManager extends Component {
     income: 0,
     expenses: 0,
     balance: 0,
-    incomeType: '',
+    incomeType: 'INCOME',
     title: '',
     amount: '',
     transactionList: [],
@@ -46,15 +46,15 @@ class MoneyManager extends Component {
       amount,
     }
     const newBalance =
-      incomeType === 'Income'
+      incomeType === 'INCOME'
         ? parseInt(balance) + parseInt(amount)
         : parseInt(balance) - parseInt(amount)
     const newIncome =
-      incomeType === 'Income'
+      incomeType === 'INCOME'
         ? parseInt(income) + parseInt(amount)
         : parseInt(income)
     const newExpences =
-      incomeType === 'Expenses'
+      incomeType === 'EXPENSES'
         ? parseInt(expenses) + parseInt(amount)
         : parseInt(expenses)
     this.setState({
@@ -79,12 +79,31 @@ class MoneyManager extends Component {
     this.setState({incomeType: event.target.value})
   }
 
-  deleteHistoryItem = id => {
-    const {transactionList} = this.state
+  deleteHistoryItem = (id, incomeType, amount) => {
+    const {transactionList, income, expenses, balance} = this.state
     const filteredTransactionList = transactionList.filter(
       eachItem => eachItem.id !== id,
     )
-    this.setState({transactionList: filteredTransactionList})
+
+    const newBalance =
+      incomeType === 'INCOME'
+        ? parseInt(balance) - parseInt(amount)
+        : parseInt(balance) + parseInt(amount)
+    const newIncome =
+      incomeType === 'INCOME'
+        ? parseInt(income) - parseInt(amount)
+        : parseInt(income)
+    const newExpences =
+      incomeType === 'EXPENSES'
+        ? parseInt(expenses) - parseInt(amount)
+        : parseInt(expenses)
+
+    this.setState({
+      transactionList: filteredTransactionList,
+      expenses: newExpences,
+      income: newIncome,
+      balance: newBalance,
+    })
   }
 
   render() {
@@ -97,6 +116,7 @@ class MoneyManager extends Component {
       amount,
       transactionList,
     } = this.state
+    console.log(incomeType)
     return (
       <div className="main-container">
         <div className="money-manager-header">
@@ -166,8 +186,8 @@ class MoneyManager extends Component {
               <select
                 id="select"
                 className="input-element select-element"
-                value={incomeType}
                 onChange={this.onChangeAmountType}
+                value={incomeType}
               >
                 <option className="income-type" value="INCOME">
                   Income
@@ -177,17 +197,19 @@ class MoneyManager extends Component {
                 </option>
               </select>
             </div>
-            <button className="add-button">Add</button>
+            <button className="add-button" type="submit">
+              Add
+            </button>
           </form>
 
           <div className="history-form">
             <h1 className="form-heading">History</h1>
-            <div className="history-header">
-              <p className="history-title">Title</p>
-              <p className="history-title">Amount</p>
-              <p className="history-title">Type</p>
-            </div>
             <ul className="unordered-history-list">
+              <div className="history-header">
+                <p className="history-title">Title</p>
+                <p className="history-title">Amount</p>
+                <p className="history-title">Type</p>
+              </div>
               {transactionList.map(eachTransaction => (
                 <TransactionItem
                   transactionDetail={eachTransaction}

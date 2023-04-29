@@ -5,15 +5,22 @@ const TransactionItem = props => {
   const {transactionDetail, deleteItem} = props
   const {id, incomeType, title, amount} = transactionDetail
 
+  let newIncomeType
+  if (incomeType === 'INCOME') {
+    newIncomeType = 'Income'
+  } else {
+    newIncomeType = 'Expenses'
+  }
+
   const onDeletingHistory = () => {
-    deleteItem(id)
+    deleteItem(id, incomeType, amount)
   }
 
   return (
     <li className="history-list">
       <p className="history-options">{title}</p>
       <p className="history-options">{`Rs ${amount}`}</p>
-      <p className="history-options">{incomeType}</p>
+      <p className="history-options">{newIncomeType}</p>
       <button
         onClick={onDeletingHistory}
         type="button"
